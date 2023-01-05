@@ -47,17 +47,34 @@ public class UnweightedGraph {
 		}
 	}
 	
+	private int nextNode(ArrayList<Integer> topo) {
+		for(int i = 0; i < inDegree.size(); i++) {
+			if(inDegree.get(i).size() == 0 && !topo.contains(i)) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	public ArrayList<Integer> topologicalSort(){
-		
-		
-		
-		
-		
-		return null;
+		ArrayList<Integer> topo = new ArrayList<Integer>();
+		while(topo.size() < numVerts) {
+			int curr = nextNode(topo);
+			topo.add(curr);
+			for(int i = 0; i < numVerts; i++) {
+				if(inDegree.get(i).contains(curr)) {
+					inDegree.get(i).remove((Integer) curr);
+				}
+			}
+		}
+		return topo;
 	}
-	
-	
+	public ArrayList<Integer> breadthFirstTraversal(){
+		
+		
+		
+		
+	}
 	public int[] shortestPath(int curr) {
 		return null;
 	}
@@ -65,6 +82,8 @@ public class UnweightedGraph {
 	public static void main(String[] args) {
 		UnweightedGraph g = new UnweightedGraph("graph.txt", 7);
 		g.printInDegree();
+		ArrayList<Integer> topo = g.topologicalSort();
+		System.out.println(topo);
 
 	}
 }
