@@ -71,19 +71,65 @@ public class UnweightedGraph {
 	}
 	public ArrayList<Integer> breadthFirstTraversal(){
 		
+		ArrayList<Integer> BFT = new ArrayList<Integer>();
+		ArrayList<Integer> q = new ArrayList<Integer>();
+		int bread = 0;
+		// where to start - 
+		q.add(nextNode(BFT));
+		while (q.size() > 0) {
+			BFT.add(q.get(0));
+			bread = q.remove(0);
+			for (int next: outDegree.get(bread)) {
+				if (!BFT.contains(next) && !q.contains(next)) {
+					q.add(next);
+				}
+			}
+			
+		}
+		return BFT;
 		
 		
 		
 	}
 	public int[] shortestPath(int curr) {
-		return null;
+		ArrayList<Integer> q = new ArrayList<Integer>();
+		int[] prev = new int[numVerts];
+		int[] dist = new int[numVerts];
+		for (int i = 0; i < numVerts; i++) {
+			prev[i] = -1;
+			dist[i] = -1;
+		}
+		q.add(curr);
+		
+		while(q.size() > 0) {
+			curr = q.remove(0);
+			for (int next: outDegree.get(curr)) {
+				if(prev[next] == -1) {
+					q.add(next);
+					prev[next] = curr;
+				}
+			}
+			if (prev[curr] != -1) { 
+				dist[curr] = dist[prev[curr]] + 1;
+			}
+			else {
+				dist[curr] = 0;
+			}
+		}
+		return dist;
 	}
 	
 	public static void main(String[] args) {
 		UnweightedGraph g = new UnweightedGraph("graph.txt", 7);
 		g.printInDegree();
-		ArrayList<Integer> topo = g.topologicalSort();
-		System.out.println(topo);
-
+		//ArrayList<Integer> topo = g.topologicalSort();
+		//System.out.println(topo);
+		System.out.println(g.breadthFirstTraversal());
+		for (int i = 0; i < 7; i++) {
+			System.out.print(i + " :");
+			int[] sp = g.shortestPath(i);
+			for (int elt: sp) System.out.print(elt + " ");
+			System.out.println();
+		}
 	}
 }
